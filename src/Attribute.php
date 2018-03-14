@@ -7,6 +7,10 @@ use Mchekin\RpgRuleset\Dice\Dice;
 class Attribute
 {
     private $value;
+    /**
+     * @var Dice
+     */
+    private $dice;
 
     /**
      * Attribute constructor.
@@ -14,7 +18,7 @@ class Attribute
      */
     public function __construct(Dice $dice)
     {
-        $this->value = $this->generateValue($dice);
+        $this->dice = $dice;
     }
 
     /**
@@ -22,15 +26,18 @@ class Attribute
      */
     public function getValue(): int
     {
+        if (is_null($this->value)) {
+            $this->value = $this->generateValue();
+        }
+
         return $this->value;
     }
 
     /**
-     * @param Dice $dice
      * @return int
      */
-    private function generateValue(Dice $dice): int
+    private function generateValue(): int
     {
-        return $dice->roll() + $dice->roll() + $dice->roll();
+        return $this->value = $this->dice->roll() + $this->dice->roll() + $this->dice->roll();
     }
 }
