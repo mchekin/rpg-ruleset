@@ -2,23 +2,24 @@
 
 namespace Mchekin\RpgRuleset;
 
-use Mchekin\RpgRuleset\Dice\Dice;
 
 class Attribute
 {
+    /**
+     * @var int
+     */
     private $value;
+    
     /**
-     * @var Dice
+     * @var string
      */
-    private $dice;
+    private $attributeType;
 
-    /**
-     * Attribute constructor.
-     * @param Dice $dice
-     */
-    public function __construct(Dice $dice)
+    public function __construct(int $value, string $attributeType)
     {
-        $this->dice = $dice;
+
+        $this->value = $value;
+        $this->attributeType = $attributeType;
     }
 
     /**
@@ -26,18 +27,14 @@ class Attribute
      */
     public function getValue(): int
     {
-        if (is_null($this->value)) {
-            $this->value = $this->generateValue();
-        }
-
         return $this->value;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    private function generateValue(): int
+    public function getAttributeType(): string
     {
-        return $this->value = $this->dice->roll() + $this->dice->roll() + $this->dice->roll();
+        return $this->attributeType;
     }
 }

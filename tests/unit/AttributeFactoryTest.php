@@ -3,23 +3,31 @@
 namespace Mchekin\RpgRuleset\Tests\Unit;
 
 
-use Mchekin\RpgRuleset\Attribute;
+use DomainException;
+use Mchekin\RpgRuleset\AttributeBuilder;
 use Mchekin\RpgRuleset\Dice\Dice;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
-class AttributeTest extends TestCase
+class AttributeFactoryTest extends TestCase
 {
     /**
      * @var Mockery\MockInterface|Dice
      */
     private $dice;
 
+    /**
+     * @var AttributeBuilder
+     */
+    private $attributeBuilder;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->dice = Mockery::mock(Dice::class);
+
+        $this->attributeBuilder = new AttributeBuilder($this->dice);
     }
 
     public function tearDown()
@@ -35,8 +43,14 @@ class AttributeTest extends TestCase
      * @param int $firstDiceRoll
      * @param int $secondDiceRoll
      * @param int $thirdDiceRoll
+     * @param string $attributeType
      */
-    public function generatesAttribute(int $firstDiceRoll, int $secondDiceRoll, int $thirdDiceRoll)
+    public function generatesAttribute(
+        int $firstDiceRoll,
+        int $secondDiceRoll,
+        int $thirdDiceRoll,
+        string $attributeType
+    )
     {
         // Arrange
         $diceRollsSum = $firstDiceRoll + $secondDiceRoll + $thirdDiceRoll;
@@ -45,10 +59,11 @@ class AttributeTest extends TestCase
         $this->dice->shouldReceive('roll')->once()->andReturn($thirdDiceRoll);
 
         // Act
-        $attribute = new Attribute($this->dice);
+        $attribute = $this->attributeBuilder->build($attributeType);
 
         // Assert
         $this->assertEquals($diceRollsSum, $attribute->getValue());
+        $this->assertEquals($attributeType, $attribute->getAttributeType());
     }
 
     /**
@@ -57,9 +72,26 @@ class AttributeTest extends TestCase
     public function rollsProvider()
     {
         return [
-            [1, 1 ,1],
-            [6, 6 ,6],
-            [3, 4 ,5],
+            [1, 1, 1, 'Strength'],
+            [6, 6, 6, 'Agility'],
+            [3, 4, 5, 'Constitution'],
         ];
+    }
+
+    /**
+     * @test
+     * @expectedException DomainException
+     * @expectedExceptionMessage Unsupported attribute Unsupported.
+     */
+    public function throwsExceptionOnUnsupportedAttributeType()
+    {
+
+        // Arrange
+        $attributeType = 'Unsupported';
+
+        // Act
+        $this->attributeBuilder->build($attributeType);
+
+        // Assert
     }
 }
