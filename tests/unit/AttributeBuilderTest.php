@@ -9,7 +9,7 @@ use Mchekin\RpgRuleset\Dice\Dice;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
-class AttributeFactoryTest extends TestCase
+class AttributeBuilderTest extends TestCase
 {
     /**
      * @var Mockery\MockInterface|Dice
@@ -76,22 +76,5 @@ class AttributeFactoryTest extends TestCase
             [6, 6, 6, 'Agility'],
             [3, 4, 5, 'Constitution'],
         ];
-    }
-
-    /**
-     * @test
-     * @expectedException DomainException
-     * @expectedExceptionMessage Unsupported attribute Unsupported.
-     */
-    public function throwsExceptionOnUnsupportedAttributeType()
-    {
-
-        // Arrange
-        $attributeType = 'Unsupported';
-
-        // Act
-        $this->attributeBuilder->build($attributeType);
-
-        // Assert
     }
 }

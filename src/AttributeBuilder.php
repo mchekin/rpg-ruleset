@@ -2,7 +2,6 @@
 
 namespace Mchekin\RpgRuleset;
 
-use DomainException;
 use Mchekin\RpgRuleset\Dice\Dice;
 
 class AttributeBuilder
@@ -11,15 +10,6 @@ class AttributeBuilder
      * @var Dice
      */
     private $dice;
-
-    const ATTRIBUTE_TYPES = [
-        'Strength',
-        'Agility',
-        'Constitution',
-        'Wisdom',
-        'Intelligence',
-        'Charisma',
-    ];
 
     /**
      * Attribute constructor.
@@ -36,11 +26,6 @@ class AttributeBuilder
      */
     public function build(string $attributeType)
     {
-        if (!in_array($attributeType, self::ATTRIBUTE_TYPES))
-        {
-            throw new DomainException("Unsupported attribute $attributeType.");
-        }
-
         return new Attribute($this->generateValue(), $attributeType);
     }
 
