@@ -1,9 +1,10 @@
 <?php
 
-namespace Mchekin\RpgRuleset\Race;
+namespace Mchekin\RpgRuleset\Race\Strategy;
 
 
 use Mchekin\RpgRuleset\Character;
+use Mchekin\RpgRuleset\Race\RaceStrategyInterface;
 
 class DwarfStrategy implements RaceStrategyInterface
 {
