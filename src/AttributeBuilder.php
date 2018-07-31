@@ -21,12 +21,19 @@ class AttributeBuilder
     }
 
     /**
-     * @param string $attributeType
-     * @return Attribute
+     * @param array $attributeNames
+     *
+     * @return Attributes
      */
-    public function build(string $attributeType)
+    public function build(array $attributeNames)
     {
-        return new Attribute($this->generateValue(), $attributeType);
+        $attributes = [];
+
+        foreach ($attributeNames as $name) {
+            $attributes[$name] = new Attribute($this->generateValue(), $name);
+        }
+
+        return new Attributes($attributes);
     }
 
     /**

@@ -3,7 +3,7 @@
   "description": "RPG ruleset implementation",
   "keywords": ["rpg", "ruleset"],
   "license": "MIT",
-  "type": "project",
+  "type": "library",
   "require": {
     "php": ">=7.0.0"
   },

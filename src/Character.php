@@ -5,24 +5,6 @@ namespace Mchekin\RpgRuleset;
 
 class Character
 {
-    /** @var int */
-    protected $strength;
-
-    /** @var int */
-    protected $agility;
-
-    /** @var int */
-    protected $constitution;
-
-    /** @var int */
-    protected $wisdom;
-
-    /** @var int */
-    protected $intelligence;
-
-    /** @var int */
-    protected $charisma;
-
     /** @var string */
     private $gender;
 
@@ -35,72 +17,15 @@ class Character
     /** @var string */
     protected $class;
 
-    /**
-     * @param int $strength
-     * @return Character
-     */
-    public function setStrength(int $strength)
-    {
-        $this->strength = $strength;
-        return $this;
-    }
-
-    /**
-     * @param int $agility
-     * @return Character
-     */
-    public function setAgility(int $agility)
-    {
-        $this->agility = $agility;
-        return $this;
-    }
-
-    /**
-     * @param int $constitution
-     * @return Character
-     */
-    public function setConstitution(int $constitution)
-    {
-        $this->constitution = $constitution;
-        return $this;
-    }
-
-    /**
-     * @param int $wisdom
-     * @return Character
-     */
-    public function setWisdom(int $wisdom)
-    {
-        $this->wisdom = $wisdom;
-        return $this;
-    }
-
-    /**
-     * @param int $intelligence
-     * @return Character
-     */
-    public function setIntelligence(int $intelligence)
-    {
-        $this->intelligence = $intelligence;
-        return $this;
-    }
-
-    /**
-     * @param int $charisma
-     * @return Character
-     */
-    public function setCharisma(int $charisma)
-    {
-        $this->charisma = $charisma;
-        return $this;
-    }
+    /** @var Attributes */
+    private $attributes;
 
     /**
      * @return int
      */
     public function getStrength(): int
     {
-        return $this->strength;
+        return $this->attributes->getValue(CharacterBuilder::ATTRIBUTE_STRENGTH);
     }
 
     /**
@@ -108,7 +33,7 @@ class Character
      */
     public function getAgility(): int
     {
-        return $this->agility;
+        return $this->attributes->getValue(CharacterBuilder::ATTRIBUTE_AGILITY);
     }
 
     /**
@@ -116,7 +41,7 @@ class Character
      */
     public function getConstitution(): int
     {
-        return $this->constitution;
+        return $this->attributes->getValue(CharacterBuilder::ATTRIBUTE_CONSTITUTION);
     }
 
     /**
@@ -124,7 +49,7 @@ class Character
      */
     public function getWisdom(): int
     {
-        return $this->wisdom;
+        return $this->attributes->getValue(CharacterBuilder::ATTRIBUTE_WISDOM);
     }
 
     /**
@@ -132,7 +57,7 @@ class Character
      */
     public function getIntelligence(): int
     {
-        return $this->intelligence;
+        return $this->attributes->getValue(CharacterBuilder::ATTRIBUTE_INTELLIGENCE);
     }
 
     /**
@@ -140,7 +65,12 @@ class Character
      */
     public function getCharisma(): int
     {
-        return $this->charisma;
+        return $this->attributes->getValue(CharacterBuilder::ATTRIBUTE_CHARISMA);
+    }
+
+    public function setAttributes(Attributes $attributes)
+    {
+        $this->attributes = $attributes;
     }
 
     /**
@@ -213,5 +143,10 @@ class Character
     public function getClass(): string
     {
         return $this->class;
+    }
+
+    public function setRaceModifier(string $attribute, int $modifier)
+    {
+        $this->attributes->setRaceModifier($attribute, $modifier);
     }
 }

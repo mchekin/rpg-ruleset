@@ -4,7 +4,7 @@ namespace Mchekin\RpgRuleset;
 
 
 use DomainException;
-use Mchekin\RpgRuleset\Race\RaceStrategyContext;
+use Mchekin\RpgRuleset\Race\RaceStrategyFactory;
 
 class CharacterBuilder
 {
@@ -39,7 +39,7 @@ class CharacterBuilder
     const GENDER_FEMALE = 'Female';
     const GENDER_SHEMALE = 'Shemale';
 
-    const ATTRIBUTE_TYPES = [
+    const ATTRIBUTES = [
         self::ATTRIBUTE_STRENGTH,
         self::ATTRIBUTE_AGILITY,
         self::ATTRIBUTE_CONSTITUTION,
@@ -89,58 +89,18 @@ class CharacterBuilder
     private $character;
 
     /**
-     * @var RaceStrategyContext
+     * @var RaceStrategyFactory
      */
-    private $raceStrategyContext;
+    private $raceStrategyFactory;
 
     public function __construct(
+        Character $character,
         AttributeBuilder $attributeBuilder,
-        RaceStrategyContext $raceStrategyContext)
+        RaceStrategyFactory $raceStrategyContext)
     {
-        $this->character = new Character();
+        $this->character = $character;
         $this->attributeBuilder = $attributeBuilder;
-        $this->raceStrategyContext = $raceStrategyContext;
-    }
-
-    /**
-     * @return Character
-     */
-    public function build(): Character
-    {
-        $this->generateAttributes()
-            ->applyRaceModifiers()
-            ->applyClassModifiers();
-
-        /** TODO:  */
-
-        return $this->character;
-    }
-
-    /**
-     * @return CharacterBuilder
-     */
-    private function generateAttributes(): CharacterBuilder
-    {
-        foreach (self::ATTRIBUTE_TYPES as $attributeType) {
-            $setter = "set{$attributeType}";
-
-            $this->character->$setter($this->attributeBuilder->build($attributeType));
-        }
-
-
-        return $this;
-    }
-
-    private function applyRaceModifiers()
-    {
-        $this->raceStrategyContext->applyAttributeModifiers();
-
-        return $this;
-    }
-
-    private function applyClassModifiers()
-    {
-        return $this;
+        $this->raceStrategyFactory = $raceStrategyContext;
     }
 
     /**
@@ -196,6 +156,46 @@ class CharacterBuilder
 
         $this->character->setClass($class);
 
+        return $this;
+    }
+
+    /**
+     * @return Character
+     */
+    public function build(): Character
+    {
+        $this->generateBaseAttributes()
+            ->applyRaceModifiers()
+            ->applyClassModifiers();
+
+        /** TODO:  */
+
+        return $this->character;
+    }
+
+    /**
+     * @return CharacterBuilder
+     */
+    private function generateBaseAttributes(): CharacterBuilder
+    {
+        $attributes = $this->attributeBuilder->build(self::ATTRIBUTES);
+
+        $this->character->setAttributes($attributes);
+
+        return $this;
+    }
+
+    private function applyRaceModifiers()
+    {
+        $raceStrategy = $this->raceStrategyFactory->getStrategy($this->character->getRace());
+
+        $this->character = $raceStrategy->applyAttributeModifiers($this->character);
+
+        return $this;
+    }
+
+    private function applyClassModifiers()
+    {
         return $this;
     }
 }

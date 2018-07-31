@@ -5,6 +5,7 @@ namespace Mchekin\RpgRuleset\Tests\Unit;
 
 use DomainException;
 use Mchekin\RpgRuleset\AttributeBuilder;
+use Mchekin\RpgRuleset\CharacterBuilder;
 use Mchekin\RpgRuleset\Dice\Dice;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -39,13 +40,15 @@ class AttributeBuilderTest extends TestCase
 
     /**
      * @dataProvider rollsProvider
+     *
      * @test
+     *
      * @param int $firstDiceRoll
      * @param int $secondDiceRoll
      * @param int $thirdDiceRoll
      * @param string $attributeType
      */
-    public function generatesAttribute(
+    public function generatesAttributes(
         int $firstDiceRoll,
         int $secondDiceRoll,
         int $thirdDiceRoll,
@@ -59,11 +62,10 @@ class AttributeBuilderTest extends TestCase
         $this->dice->shouldReceive('roll')->once()->andReturn($thirdDiceRoll);
 
         // Act
-        $attribute = $this->attributeBuilder->build($attributeType);
+        $attributes = $this->attributeBuilder->build(compact('attributeType'));
 
         // Assert
-        $this->assertEquals($diceRollsSum, $attribute->getValue());
-        $this->assertEquals($attributeType, $attribute->getAttributeType());
+        $this->assertEquals($diceRollsSum, $attributes->getValue($attributeType));
     }
 
     /**
@@ -72,9 +74,9 @@ class AttributeBuilderTest extends TestCase
     public function rollsProvider()
     {
         return [
-            [1, 1, 1, 'Strength'],
-            [6, 6, 6, 'Agility'],
-            [3, 4, 5, 'Constitution'],
+            [1, 1, 1, CharacterBuilder::ATTRIBUTE_STRENGTH],
+            [6, 6, 6, CharacterBuilder::ATTRIBUTE_AGILITY],
+            [3, 4, 5, CharacterBuilder::ATTRIBUTE_CONSTITUTION],
         ];
     }
 }

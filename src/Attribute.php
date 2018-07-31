@@ -3,23 +3,37 @@
 namespace Mchekin\RpgRuleset;
 
 
+use DomainException;
+
 class Attribute
 {
     /**
      * @var int
      */
-    private $value;
+    private $baseValue;
+
+    /**
+     * @var int
+     */
+    private $raceModifier;
     
     /**
      * @var string
      */
-    private $attributeType;
+    private $name;
 
-    public function __construct(int $value, string $attributeType)
+    public function __construct(int $baseValue, string $attributeType)
     {
+        $this->baseValue = $baseValue;
+        $this->name = $attributeType;
+    }
 
-        $this->value = $value;
-        $this->attributeType = $attributeType;
+    /**
+     * @return int
+     */
+    public function getBaseValue(): int
+    {
+        return $this->baseValue;
     }
 
     /**
@@ -27,14 +41,19 @@ class Attribute
      */
     public function getValue(): int
     {
-        return $this->value;
+        return $this->baseValue + $this->raceModifier;
     }
 
     /**
-     * @return string
+     * @param int $raceModifier
      */
-    public function getAttributeType(): string
+    public function setRaceModifier(int $raceModifier)
     {
-        return $this->attributeType;
+        if(isset($this->raceModifier))
+        {
+            throw new DomainException("Attribute race modifier can only be set once.");
+        }
+
+        $this->raceModifier = $raceModifier;
     }
 }
