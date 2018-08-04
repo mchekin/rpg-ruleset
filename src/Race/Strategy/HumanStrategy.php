@@ -11,7 +11,7 @@ class HumanStrategy implements RaceStrategyInterface
 {
     public function applyAttributeModifiers(Character $character): Character
     {
-        list($attribute1, $attribute2)= array_rand(CharacterBuilder::ATTRIBUTES, 2);
+        list($attribute1, $attribute2)= array_rand(array_flip(CharacterBuilder::ATTRIBUTES), 2);
 
         $character->setRaceModifier($attribute1, + 1);
         $character->setRaceModifier($attribute2, + 1);

@@ -96,11 +96,11 @@ class CharacterBuilder
     public function __construct(
         Character $character,
         AttributeBuilder $attributeBuilder,
-        RaceStrategyFactory $raceStrategyContext)
+        RaceStrategyFactory $raceStrategyFactory)
     {
         $this->character = $character;
         $this->attributeBuilder = $attributeBuilder;
-        $this->raceStrategyFactory = $raceStrategyContext;
+        $this->raceStrategyFactory = $raceStrategyFactory;
     }
 
     /**

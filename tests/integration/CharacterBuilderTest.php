@@ -23,7 +23,7 @@ class CharacterBuilderTest extends TestCase
     /**
      * @var MockInterface|RaceStrategyFactory
      */
-    private $raceStrategyContext;
+    private $raceStrategyFactory;
 
     /**
      * @var CharacterBuilder
@@ -40,13 +40,13 @@ class CharacterBuilderTest extends TestCase
         parent::setUp();
 
         $this->attributeBuilder = new AttributeBuilder(new SixSidedDice());
-        $this->raceStrategyContext = new RaceStrategyFactory();
+        $this->raceStrategyFactory = new RaceStrategyFactory();
         $this->character = new Character();
 
         $this->characterBuilder = new CharacterBuilder(
             $this->character,
             $this->attributeBuilder,
-            $this->raceStrategyContext
+            $this->raceStrategyFactory
         );
     }
 
@@ -97,10 +97,10 @@ class CharacterBuilderTest extends TestCase
     public function characterDataProvider()
     {
         return [
-//            ['Jorik', 'Male', 'Human', 'Paladin'],
-//            ['Julia', 'Female', 'Elf', 'Thief'],
-//            ['Gork', 'Male', 'Half-orc', 'Warrior'],
-            ['Rosksana', 'Shemale', 'Dwarf', 'Priest'],
+            ['Jorik', CharacterBuilder::GENDER_MALE, CharacterBuilder::RACE_HUMAN, CharacterBuilder::CLASS_PALADIN],
+            ['Julia', CharacterBuilder::GENDER_FEMALE, CharacterBuilder::RACE_ELF, CharacterBuilder::CLASS_THIEF],
+            ['Gork', CharacterBuilder::GENDER_MALE, CharacterBuilder::RACE_HALF_ORC, CharacterBuilder::CLASS_WARRIOR],
+            ['Rosksana', CharacterBuilder::GENDER_SHEMALE, CharacterBuilder::RACE_DWARF, CharacterBuilder::CLASS_PRIEST],
         ];
     }
 
